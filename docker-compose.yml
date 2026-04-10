@@ -1,0 +1,32 @@
+services:
+
+  frontend:
+    build: ./frontend
+    ports:
+      # Solo escucha en localhost del servidor — el nginx del servidor hace proxy aquí
+      - "127.0.0.1:3080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - boda-net
+
+  backend:
+    build: ./backend
+    expose:
+      # Puerto accesible solo dentro de la red Docker (no se mapea al exterior)
+      - "3001"
+    volumes:
+      # Persiste la base de datos SQLite fuera del contenedor
+      - ./backend/data:/app/data
+    environment:
+      - PORT=3001
+      - API_KEY=${API_KEY}
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
+    restart: unless-stopped
+    networks:
+      - boda-net
+
+networks:
+  boda-net:
+    driver: bridge

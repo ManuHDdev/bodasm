@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Invitación de boda de José Andrés y Silvia · 28 de noviembre de 2025" />
+  <title>José Andrés &amp; Silvia · 28 · XI · 2025</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="envelope-stage">
+
+  <!-- ═══════════════════════════════════════
+       PANTALLA DE SOBRE
+  ═══════════════════════════════════════ -->
+  <div id="envelope-screen" class="envelope-screen" role="dialog" aria-label="Invitación de boda">
+
+    <!--
+      SOLAPA (triángulo puro via clip-path).
+      Cubre la pantalla completa pero solo es visible el triángulo
+      que apunta hacia abajo. Al abrirse sube (translateY -100%).
+    -->
+    <div class="env-flap" id="env-flap" aria-hidden="true"></div>
+
+    <!--
+      CUERPO (rectángulo).
+      Ocupa toda la pantalla y queda debajo de la solapa.
+      Contiene el monograma y el saludo al invitado.
+      Al abrirse baja (translateY +100%).
+    -->
+    <div class="env-body" id="env-body" aria-hidden="true">
+      <div class="env-body__liner"></div>
+      <div class="env-monogram" aria-hidden="true">J &amp; S</div>
+      <p class="env-guest" id="envelope-guest" hidden></p>
+    </div>
+
+    <!-- Sello de lacre — fijado en la línea de pliegue -->
+    <button class="env-seal" id="envelope-seal" aria-label="Pulsa para abrir la invitación">
+      <svg class="env-seal__svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="40" cy="40" r="36" fill="url(#lacre-g)" />
+        <circle cx="40" cy="40" r="32" fill="none" stroke="#A83010" stroke-width="1.5" stroke-dasharray="4 2.5" />
+        <text x="40" y="46" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="18" font-style="italic" font-weight="600" fill="#FAF7F2" letter-spacing="1">J&amp;S</text>
+        <ellipse cx="32" cy="28" rx="8" ry="4" fill="white" opacity="0.15" transform="rotate(-30 32 28)" />
+        <defs>
+          <radialGradient id="lacre-g" cx="38%" cy="35%" r="60%">
+            <stop offset="0%" stop-color="#C0391A" />
+            <stop offset="100%" stop-color="#6B1800" />
+          </radialGradient>
+        </defs>
+      </svg>
+      <span class="env-seal__hint">Pulsa para abrir</span>
+    </button>
+
+  </div><!-- /#envelope-screen -->
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 1 · HERO
+  ═══════════════════════════════════════ -->
+  <section id="hero" class="hero">
+    <!-- Iniciales decorativas semitransparentes -->
+    <div class="hero__monogram" aria-hidden="true">J &amp; S</div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">os invitamos a nuestra boda</p>
+
+      <h1 class="hero__names">
+        <span class="hero__name hero__name--first">José Andrés</span>
+        <span class="hero__ampersand">&amp;</span>
+        <span class="hero__name hero__name--last">Silvia</span>
+      </h1>
+
+      <p class="hero__date">28 · Noviembre · 2025</p>
+      <p class="hero__place">Parroquia San Bartolomé de La Coronada</p>
+
+      <!-- Saludo personalizado por URL (inyectado por JS) -->
+      <p class="hero__greeting" id="hero-greeting" hidden></p>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" aria-hidden="true">
+      <span class="scroll-indicator__dot"></span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 2 · CUENTA ATRÁS
+  ═══════════════════════════════════════ -->
+  <section id="countdown" class="countdown reveal">
+    <div class="container">
+      <h2 class="section-title section-title--italic">Faltan...</h2>
+
+      <div class="countdown__grid">
+        <div class="countdown__block">
+          <span class="countdown__number" id="cd-days">00</span>
+          <span class="countdown__label">Días</span>
+        </div>
+        <div class="countdown__block">
+          <span class="countdown__number" id="cd-hours">00</span>
+          <span class="countdown__label">Horas</span>
+        </div>
+        <div class="countdown__block">
+          <span class="countdown__number" id="cd-minutes">00</span>
+          <span class="countdown__label">Minutos</span>
+        </div>
+        <div class="countdown__block">
+          <span class="countdown__number" id="cd-seconds">00</span>
+          <span class="countdown__label">Segundos</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 3 · NUESTRA HISTORIA
+  ═══════════════════════════════════════ -->
+  <section id="historia" class="historia reveal">
+    <div class="container">
+      <h2 class="section-title">Nuestra Historia</h2>
+      <div class="divider" aria-hidden="true"></div>
+
+      <div class="historia__grid">
+        <!-- Imagen placeholder -->
+        <div class="historia__image">
+          <span class="historia__image-label">Foto de los novios</span>
+
+          <!-- Rama decorativa SVG -->
+          <svg class="deco-branch deco-branch--image" viewBox="0 0 120 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M60 200 C60 150, 30 120, 20 80" stroke="#C9A96E" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M60 160 C60 130, 80 110, 90 90" stroke="#C9A96E" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M60 120 C55 100, 35 90, 25 70" stroke="#C9A96E" stroke-width="1" stroke-linecap="round"/>
+            <ellipse cx="20" cy="76" rx="8" ry="12" transform="rotate(-20 20 76)" fill="none" stroke="#C9A96E" stroke-width="1"/>
+            <ellipse cx="90" cy="86" rx="8" ry="12" transform="rotate(15 90 86)" fill="none" stroke="#C9A96E" stroke-width="1"/>
+            <ellipse cx="25" cy="66" rx="6" ry="10" transform="rotate(-30 25 66)" fill="none" stroke="#C9A96E" stroke-width="1"/>
+          </svg>
+        </div>
+
+        <!-- Texto -->
+        <div class="historia__text">
+          <p>Todo comenzó de la manera más inesperada, como suelen comenzar las mejores historias. Una tarde cualquiera, en un lugar que hoy guarda un significado especial para los dos, nuestros caminos se cruzaron por primera vez.</p>
+          <p>Lo que empezó como una amistad llena de risas y conversaciones interminables fue creciendo poco a poco, con la calma y la certeza de lo que está destinado a quedarse. Juntos hemos construido un mundo propio, hecho de pequeños momentos que se han convertido en los mejores recuerdos de nuestras vidas.</p>
+          <p>Hemos aprendido a conocernos, a sostenernos y a elegir­nos cada día. Y es precisamente esa elección la que queremos celebrar el próximo 28 de noviembre, rodeados de las personas que más queremos.</p>
+          <p>Porque una boda no es solo un día: es la promesa de todos los días que vienen después. Y vosotros sois parte esencial de esa promesa.</p>
+        </div>
+      </div>
+
+      <div class="divider" aria-hidden="true"></div>
+    </div>
+
+    <!-- Rama decorativa en la sección -->
+    <svg class="deco-branch deco-branch--section-right" viewBox="0 0 160 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M80 300 C80 230, 40 190, 20 130" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M80 250 C80 200, 120 170, 140 140" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M80 200 C70 170, 40 155, 15 130" stroke="#C9A96E" stroke-width="1.2" stroke-linecap="round"/>
+      <ellipse cx="20" cy="126" rx="10" ry="15" transform="rotate(-25 20 126)" fill="none" stroke="#C9A96E" stroke-width="1.2"/>
+      <ellipse cx="140" cy="136" rx="10" ry="15" transform="rotate(20 140 136)" fill="none" stroke="#C9A96E" stroke-width="1.2"/>
+      <ellipse cx="15" cy="126" rx="7" ry="11" transform="rotate(-35 15 126)" fill="none" stroke="#C9A96E" stroke-width="1"/>
+    </svg>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 4 · CEREMONIA
+  ═══════════════════════════════════════ -->
+  <section id="ceremonia" class="ceremonia reveal">
+    <div class="container">
+      <div class="event-card">
+        <div class="event-card__icon" aria-hidden="true">
+          <!-- Icono iglesia SVG minimalista -->
+          <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="48" height="60">
+            <line x1="32" y1="0" x2="32" y2="12" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="27" y1="7" x2="37" y2="7" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+            <polygon points="8,28 32,14 56,28" fill="none" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
+            <rect x="8" y="28" width="48" height="44" fill="none" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
+            <rect x="24" y="50" width="16" height="22" fill="none" stroke="#C9A96E" stroke-width="1.2"/>
+            <rect x="14" y="36" width="10" height="12" fill="none" stroke="#C9A96E" stroke-width="1"/>
+            <rect x="40" y="36" width="10" height="12" fill="none" stroke="#C9A96E" stroke-width="1"/>
+          </svg>
+        </div>
+
+        <h2 class="section-title">Ceremonia</h2>
+        <div class="divider" aria-hidden="true"></div>
+
+        <p class="event-card__time">12:00 h</p>
+        <p class="event-card__name">Parroquia San Bartolomé de La Coronada</p>
+        <p class="event-card__address">La Coronada, Badajoz</p>
+
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Parroquia+San+Bartolome+La+Coronada+Badajoz"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn--outline"
+        >Ver en el mapa</a>
+
+        <!-- Mapa embebido -->
+        <div class="event-card__map">
+          <iframe
+            title="Parroquia San Bartolomé de La Coronada"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3139.0!2d-5.6447!3d38.6923!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd15e2b0000000001%3A0x0!2sParroquia+San+Bartolom%C3%A9%2C+La+Coronada%2C+Badajoz!5e0!3m2!1ses!2ses!4v1700000000000!5m2!1ses!2ses"
+            width="100%"
+            height="300"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 5 · CÓCTEL
+  ═══════════════════════════════════════ -->
+  <section id="coctel" class="coctel reveal">
+    <div class="container">
+      <div class="event-card event-card--light">
+        <div class="event-card__icon" aria-hidden="true">
+          <!-- Copa SVG minimalista -->
+          <svg viewBox="0 0 48 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="48">
+            <path d="M8 8 L24 36 L40 8 Z" fill="none" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
+            <line x1="24" y1="36" x2="24" y2="52" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="14" y1="52" x2="34" y2="52" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <h2 class="section-title">Cóctel</h2>
+        <div class="divider" aria-hidden="true"></div>
+
+        <p class="event-card__time">A continuación de la ceremonia</p>
+        <p class="event-card__description">
+          Tras la ceremonia nos reuniremos para celebrar juntos.<br />
+          El lugar se confirmará próximamente.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 6 · BANQUETE
+  ═══════════════════════════════════════ -->
+  <section id="banquete" class="banquete reveal">
+    <div class="container">
+      <div class="event-card">
+        <div class="event-card__icon" aria-hidden="true">
+          <!-- Cubiertos SVG minimalista -->
+          <svg viewBox="0 0 48 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="48">
+            <line x1="16" y1="8" x2="16" y2="56" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10 8 L10 26 Q16 32 22 26 L22 8" fill="none" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M32 8 Q38 8 38 20 Q38 30 32 32 L32 56" fill="none" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <h2 class="section-title">Banquete</h2>
+        <div class="divider" aria-hidden="true"></div>
+
+        <p class="event-card__description">
+          La celebración continuará con una cena que os contaremos muy pronto.<br />
+          ¡Guardad el apetito!
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 7 · DRESS CODE
+  ═══════════════════════════════════════ -->
+  <section id="dresscode" class="dresscode reveal">
+    <div class="container">
+      <div class="event-card event-card--light">
+        <div class="event-card__icon" aria-hidden="true">
+          <!-- Percha SVG minimalista -->
+          <svg viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg" width="52" height="45">
+            <path d="M32 12 Q32 4 40 4 Q48 4 48 12" fill="none" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M32 12 L4 44 L60 44" fill="none" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <h2 class="section-title">Dress Code</h2>
+        <div class="divider" aria-hidden="true"></div>
+
+        <p class="event-card__description">
+          El código de vestimenta para este día especial se comunicará próximamente.<br />
+          Elegancia y comodidad serán la clave.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 8 · GALERÍA
+  ═══════════════════════════════════════ -->
+  <section id="galeria" class="galeria reveal">
+    <div class="container">
+      <h2 class="section-title">Galería</h2>
+      <div class="divider" aria-hidden="true"></div>
+
+      <div class="gallery__grid">
+        <div class="gallery__item gallery__item--square">
+          <span>Próximamente</span>
+        </div>
+        <div class="gallery__item gallery__item--vertical">
+          <span>Próximamente</span>
+        </div>
+        <div class="gallery__item gallery__item--square">
+          <span>Próximamente</span>
+        </div>
+        <div class="gallery__item gallery__item--horizontal">
+          <span>Próximamente</span>
+        </div>
+        <div class="gallery__item gallery__item--vertical">
+          <span>Próximamente</span>
+        </div>
+        <div class="gallery__item gallery__item--square">
+          <span>Próximamente</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 9 · RSVP
+  ═══════════════════════════════════════ -->
+  <section id="rsvp" class="rsvp reveal">
+    <div class="container container--narrow">
+      <!-- Rama decorativa RSVP -->
+      <svg class="deco-branch deco-branch--rsvp-left" viewBox="0 0 100 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M80 220 C80 170, 50 140, 30 100" stroke="#C9A96E" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M80 180 C80 150, 100 130, 110 110" stroke="#C9A96E" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M80 140 C70 120, 45 110, 20 100" stroke="#C9A96E" stroke-width="1" stroke-linecap="round"/>
+        <ellipse cx="30" cy="97" rx="9" ry="13" transform="rotate(-20 30 97)" fill="none" stroke="#C9A96E" stroke-width="1"/>
+        <ellipse cx="20" cy="97" rx="6" ry="10" transform="rotate(-30 20 97)" fill="none" stroke="#C9A96E" stroke-width="1"/>
+      </svg>
+
+      <h2 class="section-title section-title--large">¿Nos acompañas?</h2>
+      <p class="rsvp__subtitle">Por favor, confirma tu asistencia antes del 1 de noviembre de 2025</p>
+
+      <!-- Formulario -->
+      <form class="rsvp-form" id="rsvp-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="rsvp-name">Nombre completo</label>
+          <input class="form-input" type="text" id="rsvp-name" name="nombre" required placeholder="Tu nombre y apellidos" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rsvp-email">Email</label>
+          <input class="form-input" type="email" id="rsvp-email" name="email" required placeholder="tu@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rsvp-phone">Teléfono <span class="form-optional">(opcional)</span></label>
+          <input class="form-input" type="tel" id="rsvp-phone" name="telefono" placeholder="+34 600 000 000" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">¿Asistirás?</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="asistencia" value="si" required />
+              <span class="radio-custom"></span>
+              <span class="radio-text">Con mucho gusto 🥂</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="asistencia" value="no" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">Lo siento, no podré 💔</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group form-group--conditional" id="group-companions">
+          <label class="form-label" for="rsvp-companions">Número de acompañantes</label>
+          <select class="form-input form-select" id="rsvp-companions" name="acompanantes">
+            <option value="0">Solo yo</option>
+            <option value="1">1 acompañante</option>
+            <option value="2">2 acompañantes</option>
+            <option value="3">3 acompañantes</option>
+            <option value="4">4 o más</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rsvp-allergies">Alergias o intolerancias alimentarias <span class="form-optional">(opcional)</span></label>
+          <textarea class="form-input form-textarea" id="rsvp-allergies" name="alergias" placeholder="Cuéntanos si tienes alguna alergia o intolerancia alimentaria..." rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rsvp-message">Mensaje para los novios <span class="form-optional">(opcional)</span></label>
+          <textarea class="form-input form-textarea" id="rsvp-message" name="mensaje" placeholder="Déjanos un mensaje especial..." rows="4"></textarea>
+        </div>
+
+        <div class="form-error" id="form-error" hidden></div>
+
+        <button type="submit" class="btn btn--primary" id="rsvp-submit">
+          <span class="btn__text">Confirmar asistencia</span>
+          <span class="btn__loading" hidden>Enviando...</span>
+        </button>
+      </form>
+
+      <!-- Mensaje de éxito -->
+      <div class="rsvp-success" id="rsvp-success" hidden>
+        <div class="rsvp-success__icon" aria-hidden="true">♥</div>
+        <h3 class="rsvp-success__title">¡Muchas gracias!</h3>
+        <p class="rsvp-success__text">Hemos recibido tu confirmación. Estamos deseando celebrar este día tan especial contigo.</p>
+        <p class="rsvp-success__text">Con todo nuestro cariño,<br /><em>José Andrés &amp; Silvia</em></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECCIÓN 10 · FOOTER
+  ═══════════════════════════════════════ -->
+  <footer class="footer">
+    <p class="footer__names">José Andrés &amp; Silvia · 28 de noviembre de 2025</p>
+    <p class="footer__love">Hecho con amor ♥</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
