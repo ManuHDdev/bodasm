@@ -1,0 +1,29 @@
+services:
+
+  frontend:
+    image: boda-frontend:latest
+    ports:
+      - "127.0.0.1:3080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - boda-net
+
+  backend:
+    image: boda-backend:latest
+    expose:
+      - "3001"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PORT=3001
+      - API_KEY=${API_KEY}
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
+    restart: unless-stopped
+    networks:
+      - boda-net
+
+networks:
+  boda-net:
+    driver: bridge
