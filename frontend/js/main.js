@@ -3,31 +3,19 @@
 ═══════════════════════════════════════════════════════ */
 const CONFIG = {
   API_BASE: 'http://localhost:3001',
-  WEDDING_DATE: new Date('2025-11-28T12:00:00'),
+  WEDDING_DATE: new Date('2026-11-28T12:30:00'),
 };
 
 /* ═══════════════════════════════════════════════════════
    SOBRE DE INVITACIÓN
 ═══════════════════════════════════════════════════════ */
 function initEnvelope() {
-  const screen  = document.getElementById('envelope-screen');
-  const flap    = document.getElementById('env-flap');
-  const body    = document.getElementById('env-body');
-  const seal    = document.getElementById('envelope-seal');
+  const screen = document.getElementById('envelope-screen');
+  const flap   = document.getElementById('env-flap');
+  const body   = document.getElementById('env-body');
+  const seal   = document.getElementById('envelope-seal');
 
   if (!screen || !seal) return;
-
-  // Mostrar nombre del invitado si ?invitado=
-  const params = new URLSearchParams(window.location.search);
-  const guest  = params.get('invitado');
-  if (guest && guest.trim() !== '') {
-    const name  = decodeURIComponent(guest.trim());
-    const label = document.getElementById('envelope-guest');
-    if (label) {
-      label.textContent = `Hola, ${name}`;
-      label.hidden = false;
-    }
-  }
 
   seal.addEventListener('click', openEnvelope);
   seal.addEventListener('keydown', (e) => {
@@ -40,14 +28,15 @@ function initEnvelope() {
 
     // ① Sello desaparece
     seal.style.opacity   = '0';
-    seal.style.transform = 'translate(-50%, -50%) scale(0.6)';
+    seal.style.transform = 'translate(-50%, -50%) scale(0.55)';
+    seal.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
 
-    // ② Solapa sube, cuerpo baja — simultáneos tras un breve delay
+    // ② Solapa sube por arriba, cuerpo baja por abajo
     setTimeout(() => {
-      flap.classList.add('open');   // translateY(-100%) → sale por arriba
-      body.classList.add('open');   // translateY(+100%) → sale por abajo
+      flap.classList.add('open');   // translateY(-100%) — sale por arriba
+      body.classList.add('open');   // translateY(+100%) — sale por abajo
       document.body.classList.remove('envelope-stage');
-    }, 230);
+    }, 220);
 
     // ③ Limpiar DOM al acabar la transición (0.9 s) + margen
     setTimeout(() => {
@@ -62,24 +51,51 @@ function initEnvelope() {
 ═══════════════════════════════════════════════════════ */
 function initGuestPersonalization() {
   const params = new URLSearchParams(window.location.search);
-  const guest = params.get('invitado');
+  const guest  = params.get('invitado');
 
   if (!guest || guest.trim() === '') return;
 
   const name = decodeURIComponent(guest.trim());
 
-  // Mostrar saludo en el hero
+  // Saludo en el hero
   const greetingEl = document.getElementById('hero-greeting');
   if (greetingEl) {
-    greetingEl.textContent = `Hola, ${name}. Esperamos verte muy pronto.`;
+    greetingEl.textContent = `Hola, ${name} — te esperamos con mucho cariño.`;
     greetingEl.hidden = false;
   }
 
-  // Pre-rellenar el campo nombre en el formulario
+  // Nombre en la sección RSVP
+  const rsvpGuestEl = document.getElementById('rsvp-guest-names');
+  if (rsvpGuestEl) {
+    rsvpGuestEl.textContent = name;
+  }
+
+  // Pre-rellenar campo nombre del formulario
   const nameInput = document.getElementById('rsvp-name');
   if (nameInput) {
     nameInput.value = name;
   }
+}
+
+/* ═══════════════════════════════════════════════════════
+   RSVP: TOGGLE DEL FORMULARIO (sobre → abre form)
+═══════════════════════════════════════════════════════ */
+function initRsvpToggle() {
+  const btn     = document.getElementById('rsvp-toggle-btn');
+  const formWrap = document.getElementById('rsvp-form-wrap');
+
+  if (!btn || !formWrap) return;
+
+  function openForm() {
+    formWrap.hidden = false;
+    btn.style.display = 'none';
+    formWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  btn.addEventListener('click', openForm);
+  btn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openForm(); }
+  });
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -90,7 +106,7 @@ function pad(n) {
 }
 
 function updateCountdown() {
-  const now = new Date();
+  const now  = new Date();
   const diff = CONFIG.WEDDING_DATE - now;
 
   const daysEl    = document.getElementById('cd-days');
@@ -101,10 +117,7 @@ function updateCountdown() {
   if (!daysEl) return;
 
   if (diff <= 0) {
-    // Día de la boda o ya pasó
-    [daysEl, hoursEl, minutesEl, secondsEl].forEach(el => {
-      el.textContent = '00';
-    });
+    [daysEl, hoursEl, minutesEl, secondsEl].forEach(el => { el.textContent = '00'; });
     return;
   }
 
@@ -122,7 +135,6 @@ function updateCountdown() {
 function animateNumber(el, newValue) {
   if (el.textContent === newValue) return;
   el.classList.remove('flip');
-  // Forzar reflow para reiniciar la animación
   void el.offsetWidth;
   el.textContent = newValue;
   el.classList.add('flip');
@@ -135,7 +147,6 @@ function initScrollReveal() {
   const elements = document.querySelectorAll('.reveal');
 
   if (!('IntersectionObserver' in window)) {
-    // Fallback para navegadores sin soporte
     elements.forEach(el => el.classList.add('visible'));
     return;
   }
@@ -145,14 +156,13 @@ function initScrollReveal() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          // Una vez visible, dejar de observar
           observer.unobserve(entry.target);
         }
       });
     },
     {
-      threshold: 0.12,
-      rootMargin: '0px 0px -60px 0px',
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
     }
   );
 
@@ -174,10 +184,9 @@ function initRsvpForm() {
 
   if (!form) return;
 
-  // Mostrar/ocultar campo de acompañantes según asistencia
+  // Mostrar/ocultar acompañantes
   radioButtons.forEach(radio => {
     radio.addEventListener('change', () => {
-      const attends = radio.value === 'si' && radio.checked;
       if (radio.value === 'si' && radio.checked) {
         companionsGrp.classList.remove('hidden');
       } else if (radio.value === 'no' && radio.checked) {
@@ -186,16 +195,13 @@ function initRsvpForm() {
     });
   });
 
-  // Ocultar acompañantes inicialmente hasta que elijan
   companionsGrp.classList.add('hidden');
 
-  // Envío del formulario
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Validación básica
-    const name  = form.querySelector('#rsvp-name').value.trim();
-    const email = form.querySelector('#rsvp-email').value.trim();
+    const name       = form.querySelector('#rsvp-name').value.trim();
+    const email      = form.querySelector('#rsvp-email').value.trim();
     const asistencia = form.querySelector('input[name="asistencia"]:checked');
 
     if (!name || !email || !asistencia) {
@@ -208,8 +214,7 @@ function initRsvpForm() {
       return;
     }
 
-    // Recoger datos
-    const params = new URLSearchParams(window.location.search);
+    const params   = new URLSearchParams(window.location.search);
     const invitado = params.get('invitado') || '';
 
     const payload = {
@@ -223,7 +228,6 @@ function initRsvpForm() {
       invitado:     invitado,
     };
 
-    // Estado de carga
     setLoadingState(true);
     hideError();
 
@@ -239,15 +243,12 @@ function initRsvpForm() {
         throw new Error(data.error || `Error ${res.status}`);
       }
 
-      // Éxito
       form.hidden = true;
       successEl.hidden = false;
       successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     } catch (err) {
-      showError(
-        'Ha ocurrido un error al enviar tu confirmación. Por favor, inténtalo de nuevo o contáctanos directamente.'
-      );
+      showError('Ha ocurrido un error al enviar tu confirmación. Por favor, inténtalo de nuevo.');
     } finally {
       setLoadingState(false);
     }
@@ -279,11 +280,11 @@ function isValidEmail(email) {
    INIT
 ═══════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-  initEnvelope();          // gestiona el sobre Y llama a initScrollReveal al terminar
-  initGuestPersonalization();
-  initRsvpForm();
+  initEnvelope();              // gestiona el sobre; llama a initScrollReveal al terminar
+  initGuestPersonalization();  // personaliza por ?invitado=
+  initRsvpToggle();            // abre el formulario al pulsar el sobre RSVP
+  initRsvpForm();              // gestiona el envío del formulario
 
-  // Cuenta atrás: actualizar cada segundo
   updateCountdown();
   setInterval(updateCountdown, 1000);
 });
